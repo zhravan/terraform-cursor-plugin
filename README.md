@@ -1,9 +1,74 @@
-# terraform-cursor-plugin
+# Terraform Cursor plugin
 
-Terraform skills (`skills/*/SKILL.md`), CLI stubs (`commands/*.md`), manifest (`.cursor-plugin/plugin.json`), MCP (`.mcp.json` - needs Docker + `hashicorp/terraform-mcp-server`).
+Cursor plugin that packages **Agent Skills**, **workflow-oriented command documentation**, and optional **Model Context Protocol (MCP)** integration for HashiCorp Terraform and adjacent tooling (OpenTofu, Terragrunt, major clouds, Kubernetes).
 
-Install: put this folder where Cursor loads plugins, reload. Details: paths and versions live in `plugin.json` and HashiCorp MCP [deploy docs](https://developer.hashicorp.com/terraform/docs/tools/mcp-server/deploy).
+**Current release (manifest):** `1.0.0` in [`.cursor-plugin/plugin.json`](.cursor-plugin/plugin.json).
 
-CI validates the manifest on PRs. **Actions → Package → Run workflow** downloads a zip; pushing tag `v*` also uploads that zip to **Releases**.
+## Contents
 
-MIT - see `LICENSE`.
+| Component | Count | Location |
+|-----------|------:|----------|
+| Skills | 17 | [`skills/<topic>/SKILL.md`](skills/terraform-core/SKILL.md) |
+| Command guides | 24 | [`commands/`](commands/tf-init.md) |
+| MCP config | 1 | [`.mcp.json`](.mcp.json) |
+
+Skills cover core language, state, providers, modules, **AWS / Azure / GCP**, Kubernetes, testing, security, CI/CD, secrets, multi-account patterns, refactoring, OpenTofu, Terragrunt, and troubleshooting. Command docs wrap common `terraform` and `terraform state` flows with risk notes and examples.
+
+## Requirements
+
+- **Cursor** with plugin support (install path depends on your Cursor version; use the in-product documentation for *local / developer plugins*).
+- **Docker** (optional, for MCP only): used to run the official image `hashicorp/terraform-mcp-server` as configured in `.mcp.json`.
+
+## Installation
+
+### From a Git checkout
+
+1. Clone this repository (or your fork).
+2. Register the directory as a Cursor plugin per Cursor’s current instructions (often a `plugins` or `extensions` path under your Cursor config).
+3. Restart Cursor or reload plugins so skills and commands are picked up.
+
+### From a release artifact
+
+1. Open **GitHub Actions → Workflow “Package” → Run workflow**, or download the zip from **Releases** when maintainers publish a `v*` tag.
+2. Extract the archive; the layout matches this repo (skills, commands, `.cursor-plugin`, `.mcp.json`).
+
+### MCP (Terraform Registry)
+
+The bundled [`.mcp.json`](.mcp.json) starts the official server via Docker and passes through `TFE_TOKEN` and `TFE_HOSTNAME` when set (HCP Terraform / Terraform Enterprise). The package **`@hashicorp/terraform-mcp-server` is not published on npm**; supported install paths are Docker, a release binary, or `go install` as described in HashiCorp’s guide:  
+[Deploy the Terraform MCP server](https://developer.hashicorp.com/terraform/docs/tools/mcp-server/deploy).
+
+If you cannot use Docker, point MCP `command`/`args` at a locally installed `terraform-mcp-server` binary instead.
+
+## Repository layout
+
+```
+.cursor-plugin/plugin.json   # Plugin manifest; lists every skill and command path
+.mcp.json                    # MCP server definition (Docker + env pass-through)
+commands/                    # One markdown file per terraform workflow
+skills/<name>/SKILL.md       # Long-form guidance + HCL examples
+LICENSE                      # MIT
+CHANGELOG.md                 # Version history
+```
+
+Paths in `plugin.json` are authoritative; CI fails if any listed file is missing.
+
+## Development and CI
+
+| Workflow | Trigger | Purpose |
+|----------|---------|---------|
+| [CI](.github/workflows/ci.yml) | Pull requests, pushes to `main` | Validates JSON and manifest path parity |
+| [Package](.github/workflows/package.yml) | Manual dispatch, tags `v*` | Produces `terraform-cursor-plugin.zip` (artifact; release upload on tags) |
+
+To validate locally:
+
+```bash
+jq empty .cursor-plugin/plugin.json .mcp.json
+```
+
+## Contributing
+
+Issues and pull requests are welcome. Keep changes focused; update `plugin.json` whenever you add or rename skills/commands. Follow existing frontmatter patterns in skills (`name`, `description`) and commands (`name`, `description`).
+
+## License
+
+This project is released under the [MIT License](LICENSE).
