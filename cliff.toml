@@ -1,0 +1,30 @@
+# https://git-cliff.org/docs/configuration
+# Release notes from Conventional Commits (https://www.conventionalcommits.org/).
+
+[changelog]
+trim = true
+
+[git]
+conventional_commits = true
+filter_unconventional = false
+split_commits = false
+
+[[changelog.sections]]
+title = "Features"
+regex = "(?i)^feat(\\([^)]+\\))?!?:"
+
+[[changelog.sections]]
+title = "Bug fixes"
+regex = "(?i)^fix(\\([^)]+\\))?!?:"
+
+[[changelog.sections]]
+title = "Documentation"
+regex = "(?i)^docs(\\([^)]+\\))?:"
+
+[[changelog.sections]]
+title = "Chores and maintenance"
+regex = "(?i)^(chore|ci|build|refactor|perf|test|style)(\\([^)]+\\))?!?:"
+
+[[changelog.sections]]
+title = "Other"
+regex = ".*"
