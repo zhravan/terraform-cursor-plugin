@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate JSON
+        run: |
+          jq empty .cursor-plugin/plugin.json
+          jq empty .mcp.json
+
+      - name: Verify manifest lists existing files
+        run: |
+          python3 << 'PY'
+          import json
+          import os
+          import sys
+
+          with open(".cursor-plugin/plugin.json", encoding="utf-8") as f:
+              manifest = json.load(f)
+
+          missing = []
+          for key in ("skills", "commands"):
+              for path in manifest.get(key, []):
+                  if not os.path.isfile(path):
+                      missing.append(path)
+
+          if missing:
+              print("Paths in plugin.json not found on disk:", file=sys.stderr)
+              for p in missing:
+                  print(f"  {p}", file=sys.stderr)
+              sys.exit(1)
+          print("manifest ok")
+          PY
