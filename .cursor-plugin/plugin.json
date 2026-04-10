@@ -5,7 +5,7 @@
   "author": {
     "name": "Terraform Cursor Plugin contributors"
   },
-  "repository": "https://github.com/example/terraform-cursor-plugin",
+  "repository": "https://github.com/zhravan/terraform-cursor-plugin",
   "license": "MIT",
   "keywords": [
     "terraform",

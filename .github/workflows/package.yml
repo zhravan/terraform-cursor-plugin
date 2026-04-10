@@ -18,13 +18,29 @@ jobs:
           fetch-depth: 0
 
       - name: Generate release notes (Conventional Commits)
+        id: git_cliff
         if: startsWith(github.ref, 'refs/tags/v')
         uses: orhun/git-cliff-action@v4
         with:
           config: cliff.toml
-          args: --latest --strip header
+          args: -vv --latest --strip header
+          github_token: ${{ github.token }}
         env:
           OUTPUT: RELEASE_NOTES.md
+          GITHUB_REPO: ${{ github.repository }}
+
+      - name: Fallback release notes if changelog is empty
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          if [ ! -f RELEASE_NOTES.md ] || [ ! -s RELEASE_NOTES.md ]; then
+            {
+              echo "## ${{ github.ref_name }}"
+              echo ""
+              echo "Release asset: \`terraform-cursor-plugin.zip\` (below)."
+              echo ""
+              echo "Release notes were empty (e.g. first tag or non-conventional commit messages). Use \`feat:\`, \`fix:\`, \`docs:\`, \`chore:\`, etc., on \`main\` before tagging."
+            } > RELEASE_NOTES.md
+          fi
 
       - name: Build zip
         run: |
@@ -38,12 +54,16 @@ jobs:
         with:
           name: terraform-cursor-plugin
           path: terraform-cursor-plugin.zip
+          if-no-files-found: error
 
-      - name: Release
+      - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
           body_path: RELEASE_NOTES.md
           files: terraform-cursor-plugin.zip
+          fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

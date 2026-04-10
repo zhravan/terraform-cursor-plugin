@@ -29,7 +29,20 @@ Skills cover core language, state, providers, modules, **AWS / Azure / GCP**, Ku
 
 ### From a release artifact
 
-1. Open **GitHub Actions → Workflow “Package” → Run workflow**, or download the zip from **Releases** when maintainers publish a `v*` tag.
+1. **Releases** (zip attached): maintainers push an annotated-style version tag matching `v*` (for example `v1.0.0`). That triggers the Package workflow and creates a **[Releases](https://github.com/zhravan/terraform-cursor-plugin/releases)** entry with `terraform-cursor-plugin.zip`.
+2. **Actions artifacts** (no Release): open **Actions → Package →** select the latest run → download the **terraform-cursor-plugin** artifact from the bottom of the run summary. This path does **not** create a GitHub Release.
+
+This repository does **not** publish to the GitHub **Packages** tab (no npm, Maven, or Container registry workflow). Use **Releases** or **Actions artifacts** only.
+
+### Troubleshooting CI
+
+- Workflows must exist on your **default branch** (usually `main`) in the GitHub repo; push `.github/workflows/*` and merge before expecting runs.
+- **Create a release**: from the branch that contains the workflow, run `git tag v1.0.0 && git push origin v1.0.0` (adjust version). Pushing the tag is what creates the Release, not the merge alone.
+- If **Actions** are disabled for the repo or require approval, enable them under **Settings → Actions → General**.
+
+### From a release artifact (extract)
+
+1. Download the zip from **Releases** or from an **Actions** run as above.
 2. Extract the archive; the layout matches this repo (skills, commands, `.cursor-plugin`, `.mcp.json`).
 
 ### MCP (Terraform Registry)
