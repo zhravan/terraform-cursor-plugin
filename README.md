@@ -1,90 +1,40 @@
 # Terraform Cursor plugin
 
-Cursor plugin that packages **Agent Skills**, **workflow-oriented command documentation**, and optional **Model Context Protocol (MCP)** integration for HashiCorp Terraform and adjacent tooling (OpenTofu, Terragrunt, major clouds, Kubernetes).
+Agent **Skills**, **command guides** (terraform workflows + risk notes), and optional **MCP** wiring for Terraform, OpenTofu, Terragrunt, and major clouds. Manifest version: **`1.0.0`** in [`.cursor-plugin/plugin.json`](.cursor-plugin/plugin.json).
 
-**Current release (manifest):** `1.0.0` in [`.cursor-plugin/plugin.json`](.cursor-plugin/plugin.json).
+| | Count | Start here |
+|--|------:|------------|
+| Skills | 17 | [`skills/terraform-core/SKILL.md`](skills/terraform-core/SKILL.md) |
+| Commands | 24 | [`commands/`](commands/tf-init.md) |
+| MCP | 1 | [`.mcp.json`](.mcp.json) |
 
-## Contents
+**Needs:** Cursor with plugin support. **Optional:** Docker for MCP (`hashicorp/terraform-mcp-server` per `.mcp.json`; not on npm - see [HashiCorp: deploy MCP server](https://developer.hashicorp.com/terraform/docs/tools/mcp-server/deploy)). Set `TFE_TOKEN` / `TFE_HOSTNAME` for HCP Terraform / TFE.
 
-| Component | Count | Location |
-|-----------|------:|----------|
-| Skills | 17 | [`skills/<topic>/SKILL.md`](skills/terraform-core/SKILL.md) |
-| Command guides | 24 | [`commands/`](commands/tf-init.md) |
-| MCP config | 1 | [`.mcp.json`](.mcp.json) |
+## Install
 
-Skills cover core language, state, providers, modules, **AWS / Azure / GCP**, Kubernetes, testing, security, CI/CD, secrets, multi-account patterns, refactoring, OpenTofu, Terragrunt, and troubleshooting. Command docs wrap common `terraform` and `terraform state` flows with risk notes and examples.
+1. **Clone** (or fork) and point Cursor at this folder as a local plugin, then reload.
+2. **Zip:** download from [Releases](https://github.com/zhravan/terraform-cursor-plugin/releases) (`terraform-cursor-plugin.zip` after a `v*` tag), **or** **Actions → Package →** latest run → artifact (manual runs do **not** create a Release). This repo does **not** use GitHub **Packages**.
+3. Extract if needed; layout matches the tree below.
 
-## Requirements
+**Release tip:** Pushing a tag creates the Release, e.g. `git tag v1.0.1 && git push origin v1.0.1`. Workflows must be on the default branch; enable Actions under repo **Settings** if needed.
 
-- **Cursor** with plugin support (install path depends on your Cursor version; use the in-product documentation for *local / developer plugins*).
-- **Docker** (optional, for MCP only): used to run the official image `hashicorp/terraform-mcp-server` as configured in `.mcp.json`.
+## Layout
 
-## Installation
+`.cursor-plugin/plugin.json` (authoritative paths), `.mcp.json`, `commands/`, `skills/<name>/SKILL.md`, `CHANGELOG.md`, `cliff.toml` (release notes from [Conventional Commits](https://www.conventionalcommits.org/) via [git-cliff](https://git-cliff.org/)).
 
-### From a Git checkout
+## CI
 
-1. Clone this repository (or your fork).
-2. Register the directory as a Cursor plugin per Cursor’s current instructions (often a `plugins` or `extensions` path under your Cursor config).
-3. Restart Cursor or reload plugins so skills and commands are picked up.
+| Workflow | When |
+|----------|------|
+| [`ci.yml`](.github/workflows/ci.yml) | PR / `main` - JSON + manifest parity |
+| [`package.yml`](.github/workflows/package.yml) | Manual or `v*` tag - zip + Release on tags |
 
-### From a release artifact
-
-1. **Releases** (zip attached): maintainers push an annotated-style version tag matching `v*` (for example `v1.0.0`). That triggers the Package workflow and creates a **[Releases](https://github.com/zhravan/terraform-cursor-plugin/releases)** entry with `terraform-cursor-plugin.zip`.
-2. **Actions artifacts** (no Release): open **Actions → Package →** select the latest run → download the **terraform-cursor-plugin** artifact from the bottom of the run summary. This path does **not** create a GitHub Release.
-
-This repository does **not** publish to the GitHub **Packages** tab (no npm, Maven, or Container registry workflow). Use **Releases** or **Actions artifacts** only.
-
-### Troubleshooting CI
-
-- Workflows must exist on your **default branch** (usually `main`) in the GitHub repo; push `.github/workflows/*` and merge before expecting runs.
-- **Create a release**: from the branch that contains the workflow, run `git tag v1.0.0 && git push origin v1.0.0` (adjust version). Pushing the tag is what creates the Release, not the merge alone.
-- If **Actions** are disabled for the repo or require approval, enable them under **Settings → Actions → General**.
-
-### From a release artifact (extract)
-
-1. Download the zip from **Releases** or from an **Actions** run as above.
-2. Extract the archive; the layout matches this repo (skills, commands, `.cursor-plugin`, `.mcp.json`).
-
-### MCP (Terraform Registry)
-
-The bundled [`.mcp.json`](.mcp.json) starts the official server via Docker and passes through `TFE_TOKEN` and `TFE_HOSTNAME` when set (HCP Terraform / Terraform Enterprise). The package **`@hashicorp/terraform-mcp-server` is not published on npm**; supported install paths are Docker, a release binary, or `go install` as described in HashiCorp’s guide:  
-[Deploy the Terraform MCP server](https://developer.hashicorp.com/terraform/docs/tools/mcp-server/deploy).
-
-If you cannot use Docker, point MCP `command`/`args` at a locally installed `terraform-mcp-server` binary instead.
-
-## Repository layout
-
-```
-.cursor-plugin/plugin.json   # Plugin manifest; lists every skill and command path
-.mcp.json                    # MCP server definition (Docker + env pass-through)
-commands/                    # One markdown file per terraform workflow
-skills/<name>/SKILL.md       # Long-form guidance + HCL examples
-LICENSE                      # MIT
-CHANGELOG.md                 # Version history (maintainer edits; GitHub Releases also auto-generate notes)
-cliff.toml                   # git-cliff config for release notes from Conventional Commits
-```
-
-Paths in `plugin.json` are authoritative; CI fails if any listed file is missing.
-
-## Development and CI
-
-| Workflow | Trigger | Purpose |
-|----------|---------|---------|
-| [CI](.github/workflows/ci.yml) | Pull requests, pushes to `main` | Validates JSON and manifest path parity |
-| [Package](.github/workflows/package.yml) | Manual dispatch, tags `v*` | Builds zip; on `v*` tags, creates a **GitHub Release** whose body is generated by [git-cliff](https://git-cliff.org/) from **Conventional Commits** (see `cliff.toml`) |
-
-To validate locally:
-
-```bash
-jq empty .cursor-plugin/plugin.json .mcp.json
-```
+Local check: `jq empty .cursor-plugin/plugin.json .mcp.json`
 
 ## Contributing
 
-Issues and pull requests are welcome. Keep changes focused; update `plugin.json` whenever you add or rename skills/commands. Follow existing frontmatter patterns in skills (`name`, `description`) and commands (`name`, `description`).
-
-Use **[Conventional Commits](https://www.conventionalcommits.org/)** for commit titles (e.g. `feat:`, `fix:`, `docs:`, `chore:`) so [git-cliff](https://git-cliff.org/) can build accurate release notes when maintainers push a `v*` tag.
+PRs welcome. Add or rename skills/commands in `plugin.json`. Use Conventional Commits (`feat:`, `fix:`, …) for release notes.
 
 ## License
 
-This project is released under the [MIT License](LICENSE).
+[MIT](LICENSE).
