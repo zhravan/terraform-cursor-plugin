@@ -1,15 +1,11 @@
 {
   "mcpServers": {
-    "terraform-registry": {
+    "terraform": {
       "command": "docker",
       "args": [
         "run",
         "-i",
         "--rm",
-        "-e",
-        "TFE_TOKEN",
-        "-e",
-        "TFE_HOSTNAME",
         "hashicorp/terraform-mcp-server"
       ]
     }

@@ -8,7 +8,18 @@ Agent **Skills**, **command guides** (terraform workflows + risk notes), and opt
 | Commands | 24 | [`commands/`](commands/tf-init.md) |
 | MCP | 1 | [`.mcp.json`](.mcp.json) |
 
-**Needs:** Cursor with plugin support. **Optional:** Docker for MCP (`hashicorp/terraform-mcp-server` per `.mcp.json`; not on npm - see [HashiCorp: deploy MCP server](https://developer.hashicorp.com/terraform/docs/tools/mcp-server/deploy)). Set `TFE_TOKEN` / `TFE_HOSTNAME` for HCP Terraform / TFE.
+**Needs:** Cursor with plugin support. **Optional:** Docker for MCP (`hashicorp/terraform-mcp-server`; not on npm).
+
+## MCP
+
+[`.mcp.json`](.mcp.json) follows HashiCorp **without authentication** (public registry only). Cursor uses top-level **`mcpServers`**, not VS Code’s nested `"mcp": { "servers": … }` - same `command` / `args` otherwise. Details: [Deploy the Terraform MCP server](https://developer.hashicorp.com/terraform/docs/tools/mcp-server/deploy).
+
+**With authentication** (HCP Terraform / Terraform Enterprise), extend `args` after `"--rm"` with either:
+
+- **Host pass-through** (nothing secret in the file): `"-e", "TFE_TOKEN", "-e", "TFE_ADDRESS"` so Docker copies those variables from the environment Cursor sees into the container.
+- **Inline values** (for local edits only, never commit): `"-e", "TFE_ADDRESS=https://app.terraform.io", "-e", "TFE_TOKEN=…"`.
+
+`TFE_ADDRESS` defaults to `https://app.terraform.io` if unset; set it to your TFE base URL for Enterprise.
 
 ## Install
 
