@@ -7,7 +7,7 @@ description: Download and print the current remote Terraform state (JSON) to std
 
 ## Risk class
 
-**Critical data exposure** — output contains resource attributes; may include sensitive values. Does not
+**Critical data exposure**  -  output contains resource attributes; may include sensitive values. Does not
 mutate state on its own.
 
 ## Pre-flight
@@ -34,5 +34,5 @@ terraform state pull | jq '.resources[] | select(.type=="aws_s3_bucket")'
 
 ## Related
 
-- `tf-state-push` — inverse operation, extremely dangerous
+- `tf-state-push`  -  inverse operation, extremely dangerous
 - Skills: `skills/terraform-state/SKILL.md`

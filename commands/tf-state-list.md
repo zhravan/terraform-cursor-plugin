@@ -7,7 +7,7 @@ description: List resource addresses tracked in Terraform state (read-only for i
 
 ## Risk class
 
-**Read-only** for infrastructure. **State data is sensitive** — addresses may reveal architecture; some
+**Read-only** for infrastructure. **State data is sensitive**  -  addresses may reveal architecture; some
 outputs may reference secret metadata.
 
 ## Pre-flight

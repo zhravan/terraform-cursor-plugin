@@ -7,7 +7,7 @@ description: Emit a dependency graph in Graphviz DOT format
 
 ## Risk class
 
-**Read-only** — exposes resource addresses (architecture hints).
+**Read-only**  -  exposes resource addresses (architecture hints).
 
 ## Pre-flight
 
@@ -15,7 +15,7 @@ description: Emit a dependency graph in Graphviz DOT format
 
 ## Confirmation prompts
 
-None, unless exporting diagrams to external parties—review for sensitive names.
+None, unless exporting diagrams to external parties - review for sensitive names.
 
 ## Example invocations
 
@@ -26,7 +26,7 @@ terraform graph -type=plan
 
 ## Safe patterns
 
-- Great for **cycle** debugging—pair with `tf-plan` errors.
+- Great for **cycle** debugging - pair with `tf-plan` errors.
 
 ## Related
 

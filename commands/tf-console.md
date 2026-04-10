@@ -7,7 +7,7 @@ description: Interactive console for evaluating Terraform expressions in module 
 
 ## Risk class
 
-**Low** directly — but expressions may **read sensitive variables** from loaded tfvars; history files
+**Low** directly  -  but expressions may **read sensitive variables** from loaded tfvars; history files
 may leak on shared machines.
 
 ## Pre-flight

@@ -7,7 +7,7 @@ description: Destroy all resources managed by the current Terraform state and co
 
 ## Risk class
 
-**Critical / irreversible** for many resource types. Assumes **correct workspace**—disasters have
+**Critical / irreversible** for many resource types. Assumes **correct workspace** - disasters have
 destroyed production due to wrong `TF_WORKSPACE`.
 
 ## Pre-flight
@@ -34,8 +34,8 @@ If human hesitates, **abort**.
 ```bash
 terraform plan -destroy -out=destroy.bin
 terraform apply destroy.bin
-terraform destroy                  # interactive—avoid in CI without strong guards
-terraform destroy -target=...      # dangerous partial destroy—last resort with design doc
+terraform destroy                  # interactive - avoid in CI without strong guards
+terraform destroy -target=...      # dangerous partial destroy - last resort with design doc
 ```
 
 ## Safe patterns

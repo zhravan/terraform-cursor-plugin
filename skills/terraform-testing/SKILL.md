@@ -50,22 +50,22 @@ run "apply_critical_path" {
 }
 ```
 
-**`mock_provider`** prevents real API calls for data sources you stub—critical for fast unit-style
+**`mock_provider`** prevents real API calls for data sources you stub - critical for fast unit-style
 runs. Match mocked types to actual data source names used in modules.
 
 ### Assertions
 
 `assert` blocks accept arbitrary boolean expressions referencing resource attributes after **`apply`**
-runs (or computed values after `plan` when allowed). Keep assertions **stable**—avoid timestamps.
+runs (or computed values after `plan` when allowed). Keep assertions **stable** - avoid timestamps.
 
 ### Expect failures
 
-Use **`command = plan`** with `expect_failures = [var.bad_input]` (Terraform 1.6+ patterns evolve—
+Use **`command = plan`** with `expect_failures = [var.bad_input]` (Terraform 1.6+ patterns evolve - 
 consult docs for your exact version) to assert validation rejects bad variables.
 
 ## Terratest (Go)
 
-Terratest wraps Terraform with Go tests—useful for **real AWS/GCP/Azure** smoke tests.
+Terratest wraps Terraform with Go tests - useful for **real AWS/GCP/Azure** smoke tests.
 
 ```go
 package test
@@ -95,7 +95,7 @@ func TestIMUStackBootstrap(t *testing.T) {
 }
 ```
 
-Keep integration tests **short** and **isolated**—dedicated accounts/projects, aggressive cleanup.
+Keep integration tests **short** and **isolated** - dedicated accounts/projects, aggressive cleanup.
 
 ## tflint
 
@@ -127,7 +127,7 @@ Tune severity; fail CI on **errors**, warn on **warnings** initially to avoid bl
 checkov -d . --framework terraform --download-external-modules true
 ```
 
-Suppress findings with **inline** `checkov:skip` comments sparingly—prefer module fixes. Map failures
+Suppress findings with **inline** `checkov:skip` comments sparingly - prefer module fixes. Map failures
 to security tickets.
 
 ## Trivy (`trivy config`)
@@ -136,7 +136,7 @@ to security tickets.
 trivy config --severity CRITICAL,HIGH .
 ```
 
-Good for **misconfiguration** passes parallel to Checkov—correlate duplicates to avoid noise fatigue.
+Good for **misconfiguration** passes parallel to Checkov - correlate duplicates to avoid noise fatigue.
 
 ## OPA / Conftest
 
@@ -196,23 +196,23 @@ terraform -chdir=modules/vpc validate
 
 ## Test data factories
 
-Keep **`tests/fixtures`** for JSON policies and **small zipped lambdas** used in tests—avoid pulling
+Keep **`tests/fixtures`** for JSON policies and **small zipped lambdas** used in tests - avoid pulling
 multi-GB assets.
 
 ## Flaky integration tests
 
-Cloud APIs are eventually consistent—use **retries** in Terratest or mark tests **serial** (`t.Parallel`
-carefully). For IoT/Kinesis stacks, consider **localstack** only when representational—not feature
+Cloud APIs are eventually consistent - use **retries** in Terratest or mark tests **serial** (`t.Parallel`
+carefully). For IoT/Kinesis stacks, consider **localstack** only when representational - not feature
 complete.
 
 ## Contract tests between modules
 
 **`terraform providers`** and **`terraform graph`** can be snapshotted in CI to catch accidental new
-edges—but avoid brittle compares; prefer targeted **`depends_on` reviews** in PR templates.
+edges - but avoid brittle compares; prefer targeted **`depends_on` reviews** in PR templates.
 
 ## When to skip integration tests
 
-Branches that only touch **markdown** should skip slow suites—use path filters in CI (`paths-ignore`).
+Branches that only touch **markdown** should skip slow suites - use path filters in CI (`paths-ignore`).
 
 ## Reporting
 
@@ -222,7 +222,7 @@ at resource names).
 ## Closing
 
 Layer defenses: **fmt/validate/tflint** (minutes), **policy engines** (Checkov/Trivy/Conftest),
-**terraform test** (unit-ish), **Terratest** (integration, expensive). Calibrate spend vs risk—pci/sox
+**terraform test** (unit-ish), **Terratest** (integration, expensive). Calibrate spend vs risk - pci/sox
 orgs invest more in Conftest + signed plans.
 
 ## Sample GitHub Actions matrix snippet
@@ -240,11 +240,11 @@ jobs:
           directory: .
 ```
 
-Pair with OIDC cloud auth in separate jobs—see `terraform-cicd`.
+Pair with OIDC cloud auth in separate jobs - see `terraform-cicd`.
 
 ## mock_provider pitfalls
 
-Mocks must return **shapes** matching provider schemas—upgrade mocks when provider SDKs change field
+Mocks must return **shapes** matching provider schemas - upgrade mocks when provider SDKs change field
 types. When mocks drift, tests pass while production plans fail: regenerate mocks after provider bumps.
 
 ## terraform test directory layout
@@ -254,18 +254,18 @@ scope. Document how developers run a single test file if tooling supports target
 
 ## Benchmarking plan duration
 
-Track **`terraform plan` duration** in CI metrics—regressions often trace to new data sources scanning
+Track **`terraform plan` duration** in CI metrics - regressions often trace to new data sources scanning
 huge inventories. Optimize with `-refresh=false` in PR plans only when safe (discuss trade-offs with
 drift).
 
 ## Static registries
 
-Mirror providers in CI using `TF_PLUGIN_CACHE_DIR` to avoid download flakiness—align cache keys with
+Mirror providers in CI using `TF_PLUGIN_CACHE_DIR` to avoid download flakiness - align cache keys with
 lock file hashes.
 
 ## Documentation tests
 
-If README embeds `terraform-docs` output, CI should fail when `terraform-docs` would rewrite—keeps
+If README embeds `terraform-docs` output, CI should fail when `terraform-docs` would rewrite - keeps
 examples honest.
 
 ## Security scanners overlap
@@ -276,7 +276,7 @@ through the same **risk acceptance** workflow.
 ## Noise reduction
 
 Start with **HIGH/CRITICAL** only; expand severities as backlog shrinks. Teams that enable all rules
-day one often disable entire tools—gradual rollout wins.
+day one often disable entire tools - gradual rollout wins.
 
 ## Assertions on destroy
 
@@ -286,18 +286,18 @@ traffic and parallelize cautiously.
 ## Flake analytics
 
 Log flake rate for integration tests; quarantine consistently flaky tests instead of retry spamming
-main—flaky tests erode trust in green builds.
+main - flaky tests erode trust in green builds.
 
 ## Terraform Cloud policy (Sentinel) vs Conftest
 
 Organizations on HCP Terraform may implement **Sentinel** policies (vendor-specific language).
-`terraform plan` JSON output is similarly consumable—pick **one primary** general policy tool for
+`terraform plan` JSON output is similarly consumable - pick **one primary** general policy tool for
 OSS-style repos (usually Conftest) and use Sentinel only when mandated by the platform contract.
 
 ## Kitchen-Terraform (legacy)
 
 Some enterprises still maintain **Kitchen-Terraform** harnesses wrapping InSpec. If you encounter
-them, budget time to migrate to **`terraform test`** or Terratest for simpler contributor UX—
+them, budget time to migrate to **`terraform test`** or Terratest for simpler contributor UX - 
 document existing Ruby dependencies clearly until retirement.
 
 ## Provider caching in test runners
@@ -307,17 +307,17 @@ cold-start costs on every job unless you layer a slim cache volume.
 
 ## Pull request sizing vs tests
 
-Large PRs that touch many roots should **shard** test jobs—matrix by directory using a script that
+Large PRs that touch many roots should **shard** test jobs - matrix by directory using a script that
 emits changed Terraform roots from `git diff`.
 
 ## Mutation testing for modules
 
 Advanced teams occasionally **perturb** variables in property-style tests (fuzz CIDR inputs) to catch
-validation gaps—keep fuzzing offline to avoid API rate limits.
+validation gaps - keep fuzzing offline to avoid API rate limits.
 
 ## Load testing infrastructure
 
-After Terraform provisions load envs, hand off to **k6** or **Locust** pipelines—still "testing" but
+After Terraform provisions load envs, hand off to **k6** or **Locust** pipelines - still "testing" but
 outside Terraform; mention handoffs in module README so SRE knows ownership boundaries.
 
 ## Sample `terraform test` command
@@ -326,29 +326,29 @@ outside Terraform; mention handoffs in module README so SRE knows ownership boun
 terraform test -filter=tests/defaults.tftest.hcl
 ```
 
-Flags evolve—consult `terraform test -help` for your version; some releases add **verbose** logging or
+Flags evolve - consult `terraform test -help` for your version; some releases add **verbose** logging or
 **junit** reporting experiments.
 
 ## Evaluating new scanners
 
 Pilot scanners on **one repo** first; normalize rule IDs and map them to **CIS** controls when
-auditors ask for traceability—see `terraform-security`.
+auditors ask for traceability - see `terraform-security`.
 
 ## Infracost and cost regression tests
 
-Optional **Infracost** steps compare PR costs to main—treat cost JSON as another artifact requiring
+Optional **Infracost** steps compare PR costs to main - treat cost JSON as another artifact requiring
 review. Pair with **FinOps-approved instance types** enforced via tflint or Conftest to catch expensive
 skus before they merge.
 
 ## Terratest retry helpers
 
-Terratest provides **retry** helpers for intermittent AWS errors—use exponential backoff caps to
+Terratest provides **retry** helpers for intermittent AWS errors - use exponential backoff caps to
 avoid burning minutes waiting on misconfiguration that will never succeed.
 
 ## terraform console in tests
 
 For complex `locals`, developers can script **`terraform console`** with heredoc inputs in CI to
-assert expression outputs—lighter than full plans when validating pure math.
+assert expression outputs - lighter than full plans when validating pure math.
 
 ## Splitting unit vs integration jobs
 
@@ -363,7 +363,7 @@ When upgrading providers, require explicit **`BREAKING`** label in PR templates.
 
 ## Test naming conventions
 
-Prefix run blocks with `test_` or environment names consistently—future engineers should understand
+Prefix run blocks with `test_` or environment names consistently - future engineers should understand
 failure context from logs without reading HCL.
 
 ## Handling large plan files

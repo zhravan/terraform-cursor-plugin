@@ -45,6 +45,6 @@ terraform init -lockfile=readonly
 
 ## Related
 
-- `tf-plan` — after successful init
-- `tf-providers-lock` — pin checksums across platforms
+- `tf-plan`  -  after successful init
+- `tf-providers-lock`  -  pin checksums across platforms
 - Skill: `skills/terraform-providers/SKILL.md`, `skills/terraform-state/SKILL.md`

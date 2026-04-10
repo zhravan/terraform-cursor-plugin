@@ -8,11 +8,11 @@ description: Update Terraform state with real infrastructure attributes (legacy 
 ## Risk class
 
 Historically **mutated state only**; in modern Terraform, prefer **`terraform apply -refresh-only`** /
-**`terraform plan -refresh-only`** patterns—verify your version’s documentation.
+**`terraform plan -refresh-only`** patterns - verify your version’s documentation.
 
 ## Pre-flight
 
-- Understand you are reconciling **Terraform’s picture of reality**—may prelude larger plans.
+- Understand you are reconciling **Terraform’s picture of reality** - may prelude larger plans.
 
 ## Confirmation prompts
 

@@ -19,7 +19,7 @@ Does **not** mutate infrastructure by default.
 ## Confirmation prompts
 
 - Before sharing plan output externally, confirm **no secrets** leaked in resource attributes.
-- If plan proposes **unexpected destroys**, stop and escalate—do not immediately proceed to apply.
+- If plan proposes **unexpected destroys**, stop and escalate - do not immediately proceed to apply.
 
 ## Example invocations
 
@@ -36,10 +36,10 @@ terraform plan -replace='module.compute.aws_instance.broken[0]'
 
 - Always archive **`plan.bin`** for audited applies where required.
 - Use **`-refresh-only`** to understand drift before normal plans.
-- Avoid habitual **`-target`** — it hides dependency issues (break-glass only).
+- Avoid habitual **`-target`**  -  it hides dependency issues (break-glass only).
 
 ## Related
 
-- `tf-apply` — consumes `plan.bin`
-- `tf-show` — human/JSON view of saved plan
+- `tf-apply`  -  consumes `plan.bin`
+- `tf-show`  -  human/JSON view of saved plan
 - Skill: `skills/terraform-core/SKILL.md`, `skills/terraform-troubleshooting/SKILL.md`

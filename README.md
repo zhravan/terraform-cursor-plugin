@@ -6,7 +6,7 @@ Structure mirrors [appwrite/cursor-plugin](https://github.com/appwrite/cursor-pl
 
 ## Install (local plugin)
 
-1. Clone or copy this directory to a location Cursor loads plugins from (for example `~/.cursor/plugins/local/terraform-cursor-plugin`—follow current Cursor documentation for plugin discovery paths).
+1. Clone or copy this directory to a location Cursor loads plugins from (for example `~/.cursor/plugins/local/terraform-cursor-plugin` - follow current Cursor documentation for plugin discovery paths).
 2. Restart Cursor or reload plugins so skills and commands appear.
 3. Optional: enable MCP (see below).
 

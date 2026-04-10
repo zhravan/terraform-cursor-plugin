@@ -7,7 +7,7 @@ description: Mark a resource instance for forced replacement on next apply (lega
 
 ## Risk class
 
-**Medium** — forces **replace** on next apply; can cause downtime if misunderstood.
+**Medium**  -  forces **replace** on next apply; can cause downtime if misunderstood.
 
 Prefer **`terraform apply -replace=ADDR`** on modern Terraform versions.
 
@@ -29,7 +29,7 @@ terraform apply -replace='aws_instance.worker[0]'   # preferred modern replaceme
 
 ## Safe patterns
 
-- Document taint usage in ticket—`terraform show`/state may reveal tainted bits historically.
+- Document taint usage in ticket - `terraform show`/state may reveal tainted bits historically.
 - Remove taint mistakes with **`tf-untaint`**.
 
 ## Related

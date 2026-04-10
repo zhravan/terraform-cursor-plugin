@@ -7,7 +7,7 @@ description: Manually release a remote Terraform state lock
 
 ## Risk class
 
-**Critical** — can allow **concurrent writes** to state, corrupting it, if a live operation still
+**Critical**  -  can allow **concurrent writes** to state, corrupting it, if a live operation still
 holds the lock legitimately.
 
 ## Pre-flight
@@ -21,7 +21,7 @@ holds the lock legitimately.
 Ask human:
 
 1. “Show me the **`terraform plan/apply` output** proving the lock holder crashed or was cancelled.”
-2. “Paste **Lock ID** you intend to unlock—read it back aloud.”
+2. “Paste **Lock ID** you intend to unlock - read it back aloud.”
 3. “Who is on-call if this goes wrong?”
 
 If uncertain, **wait** and investigate remote backend lock table/ UI.

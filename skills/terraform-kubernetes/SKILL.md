@@ -14,7 +14,7 @@ description: >-
 
 You already have a **cluster** (GKE/EKS/AKS) from cloud Terraform. This skill addresses **in-cluster**
 objects: namespaces, RBAC, Helm charts, CRDs, and advanced **`kubernetes_manifest`**. It does not
-replace **GitOps**—it helps you choose boundaries.
+replace **GitOps** - it helps you choose boundaries.
 
 ## Provider auth patterns
 
@@ -45,7 +45,7 @@ provider "kubernetes" {
 }
 ```
 
-Rotate tokens per CI job—do not store long-lived kubeconfigs in Terraform state.
+Rotate tokens per CI job - do not store long-lived kubeconfigs in Terraform state.
 
 ## Basic objects
 
@@ -207,8 +207,8 @@ manifests** and **promotion** across namespaces.
 
 ## kubernetes_manifest provider caveats
 
-- Large YAML blobs can explode plan output—keep manifests modular.
-- Some fields are **server-defaulted**; expect perpetual drift if you omit them—use `computed_fields`
+- Large YAML blobs can explode plan output - keep manifests modular.
+- Some fields are **server-defaulted**; expect perpetual drift if you omit them - use `computed_fields`
   or accept drift via `lifecycle` where appropriate (use sparingly).
 
 ## Namespaces as blast-radius boundaries
@@ -230,32 +230,32 @@ resource "kubernetes_storage_class" "ssd" {
 }
 ```
 
-Provisioner names differ per cloud—parameterize in modules.
+Provisioner names differ per cloud - parameterize in modules.
 
 ## NetworkPolicies
 
-Declare **`kubernetes_network_policy`** alongside app deployments when service meshes are absent—
+Declare **`kubernetes_network_policy`** alongside app deployments when service meshes are absent - 
 Terraform is excellent at codifying deny-by-default posture for regulated namespaces.
 
 ## Admission and policy
 
-`ValidatingWebhookConfiguration` can be Terraform-managed, but **webhook TLS certificates** rotate—
+`ValidatingWebhookConfiguration` can be Terraform-managed, but **webhook TLS certificates** rotate - 
 pair with **cert-manager** or cloud PKI. Many teams prefer **OPA Gatekeeper/Kyverno** installed once via
 Helm, policies promoted through GitOps.
 
 ## Upgrades and CRD deletion danger
 
-Never casually `terraform destroy` CRD owners—this can cascade-delete all CR instances. Use
+Never casually `terraform destroy` CRD owners - this can cascade-delete all CR instances. Use
 `prevent_destroy` in production modules or isolate CRDs in dedicated stacks with strict approvals.
 
 ## Testing
 
 Use `terraform test` with mocked kubernetes provider for fast feedback; integration tests belong in
-Kind/k3d pipelines with ephemeral clusters—see `terraform-testing`.
+Kind/k3d pipelines with ephemeral clusters - see `terraform-testing`.
 
 ## Helm release state
 
-Terraform stores Helm release metadata in its state—not identical to Helm’s own secret storage—document this for operators who expect `helm` CLI to be authoritative.
+Terraform stores Helm release metadata in its state - not identical to Helm’s own secret storage - document this for operators who expect `helm` CLI to be authoritative.
 
 ## Blue/green and canaries
 
@@ -269,25 +269,25 @@ flip to GitOps for developer velocity.
 
 ## When not to use Terraform
 
-High-churn microservice YAML and frequent config tweaks often rot in Terraform PR latency—GitOps
+High-churn microservice YAML and frequent config tweaks often rot in Terraform PR latency - GitOps
 wins. Keep Terraform for **durable infra** and **shared security baselines**.
 
 ## Incident tips
 
 If `kubernetes` provider fails with **x509** errors, verify **`cluster_ca_certificate`** matches the
-API server, especially after certificate rotation—refresh data from cloud APIs in the same apply.
+API server, especially after certificate rotation - refresh data from cloud APIs in the same apply.
 
 ## Summary
 
 Treat Kubernetes Terraform as **platform glue**: cluster access, core charts, baseline CRDs/RBAC, and
 integrations. Delegate **application lifecycle** to GitOps when teams need rapid iteration and strong
-drift reconciliation—combine both deliberately rather than forcing a single tool to own everything.
+drift reconciliation - combine both deliberately rather than forcing a single tool to own everything.
 
 ## Workload Identity (cloud to cluster)
 
-On GKE/EKS/AKS, bind **Kubernetes service accounts** to **cloud IAM** via workload identity—Terraform
+On GKE/EKS/AKS, bind **Kubernetes service accounts** to **cloud IAM** via workload identity - Terraform
 declares the Kubernetes `ServiceAccount` annotations and the cloud-side IAM trusts. Double-check
-**identity namespace** defaults (GKE) and **OIDC issuer URLs** (EKS) when rebuilding clusters—silent
+**identity namespace** defaults (GKE) and **OIDC issuer URLs** (EKS) when rebuilding clusters - silent
 breakage shows up at runtime as `AccessDenied`, not plan time.
 
 ## Ingress controllers
@@ -299,7 +299,7 @@ platform and application pipelines to avoid TXT record fights.
 ## Operators and CR instance lifecycle
 
 Operators (Prometheus, Strimzi, etc.) create CR instances. Terraform should usually **not** manage
-those instances unless you accept Terraform as the **sole** mutator—prefer GitOps for instance-level
+those instances unless you accept Terraform as the **sole** mutator - prefer GitOps for instance-level
 changes and let Terraform pin the operator **Helm release** only.
 
 ## Pod security
@@ -310,19 +310,19 @@ true` lifts.
 
 ## Secrets management
 
-Avoid placing raw kube secrets in Terraform—prefer **External Secrets Operator** or cloud secret
+Avoid placing raw kube secrets in Terraform - prefer **External Secrets Operator** or cloud secret
 integrations. When you must template a `kubernetes_secret`, mark outputs sensitive and rotate after
-apply—see `terraform-secrets`.
+apply - see `terraform-secrets`.
 
 ## Provider alias patterns
 
 Multiple clusters (prod vs DR) use **`provider "kubernetes" { alias = "dr" ... }`** and explicit
-`provider = kubernetes.dr` on resources—identical to cloud provider alias stories.
+`provider = kubernetes.dr` on resources - identical to cloud provider alias stories.
 
 ## API version churn
 
 Kubernetes APIs graduate (`extensions/v1beta1` removals). Pin GKE/EKS versions in Terraform cluster
-resources and schedule API migration sprints—`kubectl convert` and provider errors guide refactors.
+resources and schedule API migration sprints - `kubectl convert` and provider errors guide refactors.
 
 ## Observability stack ownership
 
@@ -344,7 +344,7 @@ infrastructure.
 ## Human factors
 
 Platform teams should run **office hours** for Terraform+Helm because mis-clicked `helm uninstall`
-bypasses Terraform—document reconciliation (`terraform apply`) procedures to restore desired state.
+bypasses Terraform - document reconciliation (`terraform apply`) procedures to restore desired state.
 
 ## Compatibility matrix
 
@@ -357,18 +357,18 @@ Run `helm repo update` in CI before `terraform plan` when using remote chart rep
 `version` on `helm_release` to avoid surprise upgrades. Cache chart downloads where possible but
 validate checksums or version pins to prevent supply-chain drift between runners.
 
-Document **`postrender`** or **`set`** usage in modules—teams often need to inject cluster-specific
+Document **`postrender`** or **`set`** usage in modules - teams often need to inject cluster-specific
 URLs. Keeping those injections in `templatefile` makes reviews easier than opaque `--set` strings in
 wrapper scripts.
 
 For **multi-cluster Helm releases**, duplicate `helm_release` resources with distinct providers
-rather than overloading `count`—clear resource addresses simplify targeted destroys during cluster
+rather than overloading `count` - clear resource addresses simplify targeted destroys during cluster
 decommissioning.
 
 Add **`lint`** steps for rendered manifests (`helm template` + `kubeconform`) in CI even when
-Terraform plans succeed—schema errors sometimes surface only after API servers validate applied
+Terraform plans succeed - schema errors sometimes surface only after API servers validate applied
 objects.
 
-Document **`kubernetes_manifest` wait** behavior if used—some fields require server reconciliation
+Document **`kubernetes_manifest` wait** behavior if used - some fields require server reconciliation
 before a second apply converges; rushing apply loops creates thrash.
 

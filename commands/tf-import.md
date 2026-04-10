@@ -7,7 +7,7 @@ description: Import existing infrastructure into Terraform state (CLI workflow)
 
 ## Risk class
 
-**Medium** — mutates **state only**, but wrong ID causes **wrong** mapping and future destructive plans.
+**Medium**  -  mutates **state only**, but wrong ID causes **wrong** mapping and future destructive plans.
 
 Prefer modern **`import` blocks** in `.tf` files when workflow allows (see skill `terraform-core`).
 
@@ -36,8 +36,8 @@ terraform import 'aws_lambda_function.imu' imu-processor
 
 ## Safe patterns
 
-- Immediately run **`terraform plan`** — expect diffs; adjust config until plan is safe.
-- Avoid mass imports without **runbook**—batch per resource type.
+- Immediately run **`terraform plan`**  -  expect diffs; adjust config until plan is safe.
+- Avoid mass imports without **runbook** - batch per resource type.
 
 ## Related
 

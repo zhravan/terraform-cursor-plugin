@@ -7,7 +7,7 @@ description: Manage Terraform workspaces for a given backend configuration
 
 ## Risk class
 
-**High potential for human error** — selecting wrong workspace can **plan against prod state** while
+**High potential for human error**  -  selecting wrong workspace can **plan against prod state** while
 believing you’re in dev.
 
 ## Pre-flight
@@ -31,7 +31,7 @@ terraform workspace delete staging
 
 ## Safe patterns
 
-- **Never** rely on workspace alone for hard prod/stage isolation in regulated environments—separate
+- **Never** rely on workspace alone for hard prod/stage isolation in regulated environments - separate
   state backends/keys are safer.
 - Pin **`TF_WORKSPACE`** in CI explicitly.
 

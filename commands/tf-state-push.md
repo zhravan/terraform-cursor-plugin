@@ -7,7 +7,7 @@ description: Upload a local state file to the configured backend (overwrite remo
 
 ## Risk class
 
-**Catastrophic** — can **overwrite** remote state, causing loss of truth, recreation storms, or merge
+**Catastrophic**  -  can **overwrite** remote state, causing loss of truth, recreation storms, or merge
 of incompatible histories.
 
 ## Pre-flight
@@ -34,7 +34,7 @@ terraform state push tfstate.repaired.json
 ## Safe patterns
 
 - Default stance: **do not run** outside recovery drills or documented procedures.
-- After push, run **`terraform plan`** immediately—expect careful analysis.
+- After push, run **`terraform plan`** immediately - expect careful analysis.
 
 ## Related
 

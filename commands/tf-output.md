@@ -7,7 +7,7 @@ description: Query root module outputs after apply
 
 ## Risk class
 
-**Read-only** — output values may be marked **sensitive**; still appear depending on flags/version.
+**Read-only**  -  output values may be marked **sensitive**; still appear depending on flags/version.
 
 ## Pre-flight
 

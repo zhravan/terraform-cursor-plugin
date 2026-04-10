@@ -7,7 +7,7 @@ description: Validate Terraform configuration syntax and internal consistency
 
 ## Risk class
 
-**Read-only** — does not touch cloud APIs directly (still may load provider schemas).
+**Read-only**  -  does not touch cloud APIs directly (still may load provider schemas).
 
 ## Pre-flight
 
@@ -28,7 +28,7 @@ terraform -chdir=modules/vpc validate
 ## Safe patterns
 
 - Add to **every** CI pipeline before `plan`.
-- When validate fails after provider upgrade, read the **first** error block—subsequent errors may be
+- When validate fails after provider upgrade, read the **first** error block - subsequent errors may be
   cascades.
 
 ## Related

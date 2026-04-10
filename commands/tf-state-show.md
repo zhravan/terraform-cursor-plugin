@@ -27,9 +27,9 @@ terraform state show -json 'module.compute.aws_lambda_function.this'
 
 ## Safe patterns
 
-- Prefer **narrow** addresses—avoid dumping entire state; use `state pull` + jq with care.
+- Prefer **narrow** addresses - avoid dumping entire state; use `state pull` + jq with care.
 
 ## Related
 
 - `tf-state-list`
-- `tf-show` — for saved plans / human-readable state snapshots
+- `tf-show`  -  for saved plans / human-readable state snapshots

@@ -1,7 +1,7 @@
 ---
 name: terraform-azure
 description: >-
-  Production patterns for hashicorp/azurerm (3.x/4.x—pin in root stacks). Use for resource groups,
+  Production patterns for hashicorp/azurerm (3.x/4.x - pin in root stacks). Use for resource groups,
   management groups and policies (via azurerm or azapi where needed), networking (vnet, subnets, private
   endpoints), Azure Kubernetes Service, Linux/Windows Functions, Storage Accounts with immutability
   and encryption, Key Vault access policies vs RBAC, Monitor diagnostics, and landing zone integration.
@@ -46,7 +46,7 @@ provider "azurerm" {
 }
 ```
 
-**`features {}`** toggles destructive behaviors—review upgrades carefully; breaking changes appear in
+**`features {}`** toggles destructive behaviors - review upgrades carefully; breaking changes appear in
 provider changelogs.
 
 ## Resource group and tagging
@@ -64,7 +64,7 @@ resource "azurerm_resource_group" "app" {
 }
 ```
 
-Landing zones may forbid arbitrary RGs—use centrally issued names.
+Landing zones may forbid arbitrary RGs - use centrally issued names.
 
 ## Networking (hub-spoke friendly)
 
@@ -158,7 +158,7 @@ resource "azurerm_kubernetes_cluster" "this" {
 }
 ```
 
-Integrate **Azure Monitor**, **workload identity**, and **private clusters** per security baseline—
+Integrate **Azure Monitor**, **workload identity**, and **private clusters** per security baseline - 
 flags vary by API tier; consult current provider docs when upgrading majors.
 
 ## Azure Functions (consumption vs dedicated)
@@ -253,7 +253,7 @@ resource "azurerm_monitor_diagnostic_setting" "aks" {
 ## Multi-subscription patterns
 
 Use **aliases** or **multiple provider blocks** (`alias = "hub"`) when deploying spoke peers referencing
-hub virtual network IDs—mirror AWS multi-account mental model; see `terraform-multi-account`.
+hub virtual network IDs - mirror AWS multi-account mental model; see `terraform-multi-account`.
 
 ## State backend on Azure
 
@@ -263,13 +263,13 @@ Use `azurerm` remote backend (storage + container). Enable **versioning** and **
 ## Testing and policy
 
 - `terraform validate` + `azurerm` provider upgrade previews in sandbox subs.
-- **`checkov`** and **`tflint`** rulesets exist for Azure—see `terraform-testing`.
+- **`checkov`** and **`tflint`** rulesets exist for Azure - see `terraform-testing`.
 
 ## Compared to AWS reference
 
 Azure favors **managed identities** and **RBAC** over long IAM JSON documents, but the **shape** of
 Terraform modules remains: networks, compute, functions, data, observability. Port lessons from the
-Kinesis/Lambda story to **Event Hubs + Azure Functions** when building telemetry pipelines—patterns,
+Kinesis/Lambda story to **Event Hubs + Azure Functions** when building telemetry pipelines - patterns,
 not resource names, transfer.
 
 ## Upgrade discipline
@@ -284,14 +284,14 @@ GCP resources → `terraform-gcp`. Raw Kubernetes YAML → `terraform-kubernetes
 ## Extra: budget + sentinel hooks
 
 Wire **consumption budgets** (`azurerm_consumption_budget_resource_group`) to action groups for early
-spend alarms. If using **Terraform Cloud policies** (Sentinel/OPA), keep module interfaces stable—
+spend alarms. If using **Terraform Cloud policies** (Sentinel/OPA), keep module interfaces stable - 
 policy denies on noisy tags are easier than retrofitting 200 services.
 
 ## Resilience choices
 
 For mission-critical AKS, enable **zone redundancy**, **maintenance windows**, and **API server
 authorized IP ranges** or private clusters. Pair Terraform changes with **blue/green node image**
-rollouts documented in runbooks—some knobs remain operator-driven even when Terraform declares baseline
+rollouts documented in runbooks - some knobs remain operator-driven even when Terraform declares baseline
 clusters.
 
 ## Naming limits and collisions
@@ -307,7 +307,7 @@ Higher-level governance (deny public IPs, enforce locations) might use **`azurer
 ## Closing
 
 Azure Terraform succeeds when **features blocks**, **identity models**, and **private networking** are
-decided up front—retrofitting private endpoints or KV RBAC later is doable but expensive.
+decided up front - retrofitting private endpoints or KV RBAC later is doable but expensive.
 
 ## Azure SQL (illustrative hardened pattern)
 
@@ -390,7 +390,7 @@ resource "azurerm_application_gateway" "this" {
 }
 ```
 
-Complete AGW configs are verbose—keep them in dedicated modules with **examples**.
+Complete AGW configs are verbose - keep them in dedicated modules with **examples**.
 
 ## User-assigned managed identities
 
@@ -415,7 +415,7 @@ resource "azurerm_role_assignment" "identity_storage" {
 Where AWS uses **Kinesis + Lambda**, Azure often pairs **Event Hubs** with **Functions** or **Stream
 Analytics**. Terraform layout stays similar: stream namespace, authorization rules with least privilege,
 consumer Function/Event Processor host, and **dead-letter** handling via Service Bus or storage
-queues—mirror the partial failure tuning from the AWS reference skill when SDKs support batching.
+queues - mirror the partial failure tuning from the AWS reference skill when SDKs support batching.
 
 ## Observability conventions
 
@@ -430,7 +430,7 @@ Some operations (AKS upgrades, node image rotation) remain semi-manual; document
 
 ## Training new contributors
 
-Pair Azure Portal **read-only** roles with Terraform plans in sandboxes—engineers who only click Ops
+Pair Azure Portal **read-only** roles with Terraform plans in sandboxes - engineers who only click Ops
 will propose unsafe modules until they see how `features {}` interacts with deletes.
 
 ## Bastion and just-in-time access
@@ -442,7 +442,7 @@ because bastion subnets have design constraints (dedicated `/26` recommendation)
 ## Cost management tags
 
 Enforce **`InheritTag`** policies from management groups so `azurerm_resource_group` tags cascade
-consistently. Applications adding ad-hoc tag keys should register them with FinOps—random tag keys
+consistently. Applications adding ad-hoc tag keys should register them with FinOps - random tag keys
 break chargeback reports and waste cross-team time reconciling CSV exports.
 
 ## Reference: random password helper
@@ -454,11 +454,11 @@ resource "random_password" "sql_admin" {
 }
 ```
 
-Store generated secrets in **Key Vault** via pipeline—not in Terraform outputs—see `terraform-secrets`.
+Store generated secrets in **Key Vault** via pipeline - not in Terraform outputs - see `terraform-secrets`.
 
 Keep **`provider "random" {}`** registration (`required_providers`) alongside other providers when
 using the random resource in shared modules.
 
-Keep a **provider upgrade calendar** that links AzureRM release notes to your module milestones—Azure
+Keep a **provider upgrade calendar** that links AzureRM release notes to your module milestones - Azure
 API sunsets appear in provider changelogs before they surprise production applies.
 

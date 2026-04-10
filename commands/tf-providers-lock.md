@@ -7,7 +7,7 @@ description: Update the dependency lock file with checksums for provider release
 
 ## Risk class
 
-**Medium repository impact** — updates `.terraform.lock.hcl`; incorrect platforms can break CI on
+**Medium repository impact**  -  updates `.terraform.lock.hcl`; incorrect platforms can break CI on
 exotic architectures.
 
 ## Pre-flight

@@ -37,7 +37,7 @@ provider "aws" {
 }
 ```
 
-Explicit `tags` on a resource **merge** with defaults; collisions should be rare—prefer unique
+Explicit `tags` on a resource **merge** with defaults; collisions should be rare - prefer unique
 keys per layer (`Service` on resources, `Project` globally).
 
 ## IAM policy documents (data source)
@@ -514,8 +514,8 @@ IAM-scoped `ssm:GetParameter` when dynamic TF changes are too heavy.
 
 - **Cold starts** with large container images benefit from **provisioned concurrency** (cost trade-off).
 - **Kinesis iterator age** alarms catch processor lag before data loss.
-- **IoT rule errors** publish to CloudWatch metrics—monitor `Success` vs `Failure`.
-- Apply **SCPs** at org level for region denial and service guards—see `terraform-multi-account`.
+- **IoT rule errors** publish to CloudWatch metrics - monitor `Success` vs `Failure`.
+- Apply **SCPs** at org level for region denial and service guards - see `terraform-multi-account`.
 
 ## When not to use this skill
 
@@ -526,4 +526,4 @@ Cross-cloud patterns → `terraform-azure`, `terraform-gcp`. Kubernetes manifest
 
 Build and push the container image in the pipeline **before** `terraform apply` updates `image_uri`.
 For immutable tags, reference digests (`image_uri = ...@sha256:...`) when your release process
-supports them—this prevents Lambda from silently running stale layers after a failed promotion step.
+supports them - this prevents Lambda from silently running stale layers after a failed promotion step.

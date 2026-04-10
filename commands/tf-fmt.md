@@ -7,7 +7,7 @@ description: Format Terraform configuration files to canonical style
 
 ## Risk class
 
-**Low** — rewrites `.tf` / `.tfvars` files in working tree (review diff in VCS).
+**Low**  -  rewrites `.tf` / `.tfvars` files in working tree (review diff in VCS).
 
 ## Pre-flight
 

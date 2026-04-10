@@ -74,7 +74,7 @@ resource "google_storage_bucket_iam_policy" "telemetry" {
 ```
 
 Prefer **resource-level IAM** modules over giant monolithic `google_project_iam_binding` blocks that
-erase sibling bindings—use **`google_project_iam_member`** for additive grants when possible.
+erase sibling bindings - use **`google_project_iam_member`** for additive grants when possible.
 
 ## Networking
 
@@ -249,7 +249,7 @@ resource "google_bigquery_dataset" "imu" {
 }
 ```
 
-Wire **BigQuery subscriptions** or **Dataflow templates** in higher environments—patterns align with
+Wire **BigQuery subscriptions** or **Dataflow templates** in higher environments - patterns align with
 AWS Kinesis analytics, though implementations differ.
 
 ## Cloud Storage (hardened)
@@ -321,17 +321,17 @@ Azure/AWS-first topics live in sibling skills. Deep Kubernetes **in-cluster** re
 ## State and org constraints
 
 Terraform state should live in a **central seed project** bucket with **uniform access**, **CMEK**,
-and **object versioning**. Locking is a GCS concern (Terraform handles lock objects)—review
+and **object versioning**. Locking is a GCS concern (Terraform handles lock objects) - review
 `terraform-state`.
 
 ## Testing hooks
 
 Use **`terraform test`** against modules with `mock_provider` for Pub/Sub naming; for integration,
-Terratest with a disposable project—see `terraform-testing`.
+Terratest with a disposable project - see `terraform-testing`.
 
 ## FinOps defaults
 
-Enable **labels** (`labels = { env = var.env }`) on GKE, buckets, and functions—export a `local.mandatory_labels`
+Enable **labels** (`labels = { env = var.env }`) on GKE, buckets, and functions - export a `local.mandatory_labels`
 map merged everywhere.
 
 ## Cross-project IAM
@@ -341,30 +341,30 @@ Service agents (`service-${PROJECT_NUMBER}@...`) need **`roles/artifactregistry.
 ## Operational escalations
 
 When **`google-beta`** resources disappear from plans unexpectedly, verify you didn’t drop the provider
-on the resource—some GA promotions move resources to `google` only in newer provider releases; read
+on the resource - some GA promotions move resources to `google` only in newer provider releases; read
 changelogs before major bumps.
 
 ## Bonus: Cloud Monitoring dashboards-as-code
 
-Optional `google_monitoring_dashboard` JSON payloads can encode dashboards—keep JSON in `templatefile`
+Optional `google_monitoring_dashboard` JSON payloads can encode dashboards - keep JSON in `templatefile`
 for readability. Pair with alerting policies for Pub/Sub dead-letter topics.
 
 ## Developer experience
 
-Standardize **`TF_VAR_project_id`** in dotenv files for local apply; never commit SA JSON—use **gcloud**
+Standardize **`TF_VAR_project_id`** in dotenv files for local apply; never commit SA JSON - use **gcloud**
 ADC or short-lived WIF tokens in CI.
 
 ## Summary
 
 GCP Terraform quality hinges on **IAM membership style**, **private networking +NAT/Serverless
 connectors**, and **dual provider (`google`/`google-beta`) hygiene**. Treat service-agent emails and
-org policies as first-class inputs in modules—surprises arise when defaults assume a blank-slate
+org policies as first-class inputs in modules - surprises arise when defaults assume a blank-slate
 project but land in a heavily constrained folder.
 
 ## Shared VPC attachments
 
 Spoke projects attach to Shared VPC host subnets via **`google_compute_shared_vpc_service_project`**
-and **`google_compute_subnetwork_iam_member`**. Document which **team owns the host project**—
+and **`google_compute_subnetwork_iam_member`**. Document which **team owns the host project** - 
 Terraform mistakes here show up as routes existing but instances lacking `PRIVATE_GOOGLE_ACCESS` to
 reach APIs.
 
@@ -377,7 +377,7 @@ when pinning provider features to preview tracks.
 ## Data residency
 
 Set **`location`**/`region` thoughtfully for Pub/Sub, BigQuery, Storage, and KMS. Multi-regional
-choices (`US`, `EU`) differ from single regions—cost and compliance trade-offs belong in README.
+choices (`US`, `EU`) differ from single regions - cost and compliance trade-offs belong in README.
 
 ## Hierarchical firewall policies
 
@@ -404,7 +404,7 @@ resource "google_secret_manager_secret" "api_key" {
 ```
 
 Consume via **environment variables sourced from Secret Manager** in Cloud Run/Functions where
-supported—see `terraform-secrets` for plaintext-in-state caveats.
+supported - see `terraform-secrets` for plaintext-in-state caveats.
 
 ## Cloud KMS IAM for service agents
 
@@ -420,24 +420,24 @@ requests.
 
 ## Backups and DR
 
-For GKE stateful workloads, combine **persistent disks**, **Backup for GKE**, or vendor backups—
+For GKE stateful workloads, combine **persistent disks**, **Backup for GKE**, or vendor backups - 
 declare only what Terraform should own (e.g., **backup plans**) and document operational restores.
 
 ## Naming collisions
 
-Project IDs are **globally unique**; buckets too. Use **`random_id`** suffixes sparingly—FinOps teams
+Project IDs are **globally unique**; buckets too. Use **`random_id`** suffixes sparingly - FinOps teams
 prefer deterministic patterns. Validate lengths (`length <= 30` for many identifiers).
 
 ## Collaboration tips
 
 Use **`terraform plan -generate-config-out`** (Terraform 1.8+) cautiously when importing
-hand-built projects—treat generated files as drafts. Pair imports with `terraform import` blocks per
+hand-built projects - treat generated files as drafts. Pair imports with `terraform import` blocks per
 `terraform-core`.
 
 ## Lessons from other clouds
 
 From AWS IoT/Kinesis patterns: on GCP, **MQTT to Pub/Sub** often uses **IoT Core equivalent services**
-or partner gateways—Terraform wiring focuses on **topics/subscriptions/functions** more than device
+or partner gateways - Terraform wiring focuses on **topics/subscriptions/functions** more than device
 firmware. Reuse the **batch/partial failure** discipline even when SDKs differ.
 
 ## Org policy diagnostics
@@ -446,13 +446,13 @@ When `google_project` creation fails with policy violations, capture the **const
 route to the organization admin; keep Terraform modules **idempotent** so retries succeed after policy
 exceptions or folder moves.
 
-Document **`google_project_service`** activations required by downstream resources—mysterious API
+Document **`google_project_service`** activations required by downstream resources - mysterious API
 errors often mean the **Service Usage API** has not been enabled yet for that project.
 
-Prefer **`google_project_service`** with **`disable_on_destroy = false`** in shared platform stacks—
+Prefer **`google_project_service`** with **`disable_on_destroy = false`** in shared platform stacks - 
 accidental service disables during destroy devastate dependent environments.
 
-Snapshot **`gcloud services list --enabled`** before major refactors—Terraform may not yet know about
+Snapshot **`gcloud services list --enabled`** before major refactors - Terraform may not yet know about
 hand-enabled APIs others set in the console.
 
 

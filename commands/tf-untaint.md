@@ -7,7 +7,7 @@ description: Remove the tainted flag from a resource instance
 
 ## Risk class
 
-**Low** — removes **replace marker** from state; does not change cloud resource directly.
+**Low**  -  removes **replace marker** from state; does not change cloud resource directly.
 
 ## Pre-flight
 

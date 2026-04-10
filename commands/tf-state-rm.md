@@ -7,7 +7,7 @@ description: Remove resource instances from Terraform state without destroying c
 
 ## Risk class
 
-**High** — causes Terraform to **forget** resources; next apply may attempt to **recreate** or
+**High**  -  causes Terraform to **forget** resources; next apply may attempt to **recreate** or
 **adopt** incorrectly if config still exists.
 
 ## Pre-flight
@@ -21,8 +21,8 @@ description: Remove resource instances from Terraform state without destroying c
 Ask:
 
 1. “Confirm address **`ADDR`** to remove from state only?”
-2. “Confirm **cloud object will NOT be deleted** by this command—but **may** be deleted later if
-   config still declares it—what is the follow-up?”
+2. “Confirm **cloud object will NOT be deleted** by this command - but **may** be deleted later if
+   config still declares it - what is the follow-up?”
 3. “Two-person review completed?” (prod)
 
 ## Example invocations

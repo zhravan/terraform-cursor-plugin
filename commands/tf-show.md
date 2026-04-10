@@ -7,7 +7,7 @@ description: Show current state or a saved plan file in human or JSON form
 
 ## Risk class
 
-**Data exposure** — plans and states may include sensitive attributes; **`-json`** especially risky to
+**Data exposure**  -  plans and states may include sensitive attributes; **`-json`** especially risky to
 paste publicly.
 
 ## Pre-flight

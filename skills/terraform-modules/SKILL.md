@@ -13,7 +13,7 @@ description: >-
 ## Scope
 
 Modules are **packaged configurations** you call with `module` blocks. This skill targets **reusable**
-modules shared across teams—not one-off folder splits. State, CI, and cloud specifics are covered in
+modules shared across teams - not one-off folder splits. State, CI, and cloud specifics are covered in
 sibling skills.
 
 ## Standard layout
@@ -35,7 +35,7 @@ modules/vpc/
 └── tests/              # optional terraform test or external harness
 ```
 
-**`examples/`** should `terraform init && validate` in CI—the fastest signal that your interface still
+**`examples/`** should `terraform init && validate` in CI - the fastest signal that your interface still
 works.
 
 ## No provider blocks inside reusable modules
@@ -45,7 +45,7 @@ works.
 aliases are needed.
 
 **Why:** Hidden defaults cause resources to deploy into whichever account/region the caller’s
-ambient credentials happen to target—silent data exfiltration or cross-env corruption.
+ambient credentials happen to target - silent data exfiltration or cross-env corruption.
 
 **Exception:** Thin **root wrappers** that exist solely to instantiate a composition may set provider
 defaults. Mark them clearly as **not** library-grade.
@@ -98,7 +98,7 @@ source = "git::https://github.com/myorg/tf-modules.git//vpc?ref=v1.8.0"
 ```
 
 Avoid **floating** `ref=main` for anything beyond developer sandboxes. For hotfixes, cut **`v1.8.1`**
-rather than retagging—Git tags should be immutable.
+rather than retagging - Git tags should be immutable.
 
 ## Public vs private registry
 
@@ -137,9 +137,9 @@ CI should fail when generated docs drift (`terraform-docs` in CI diff check).
 
 Treat `variables.tf` like a **function signature**:
 
-- Defaults belong on **safe** booleans and tags—not on CIDRs that gate production traffic.
+- Defaults belong on **safe** booleans and tags - not on CIDRs that gate production traffic.
 - Use `validation` blocks for quick feedback.
-- Outputs should expose **ARNs/IDs** other stacks need—not entire resource objects unless justified.
+- Outputs should expose **ARNs/IDs** other stacks need - not entire resource objects unless justified.
 
 ```hcl
 output "lambda_function_arn" {
@@ -152,7 +152,7 @@ output "lambda_function_arn" {
 
 Options:
 
-1. **`terraform test`** with `tests/*.tftest.hcl` inside the module—fast, native—see `terraform-testing`.
+1. **`terraform test`** with `tests/*.tftest.hcl` inside the module - fast, native - see `terraform-testing`.
 2. **Terratest** in Go for integration with real clouds (slow, powerful).
 3. **Kitchen-Terraform** (legacy but still found in enterprises).
 
@@ -161,10 +161,10 @@ At minimum, run `terraform fmt`, `validate`, and **`examples/*` init** on every 
 ## Anti-patterns
 
 - **Data sources inside modules** that reach “anywhere” (`aws_vpc` by ambiguous tag) create fragile
-  coupling—pass IDs explicitly.
-- **`count` with index-based naming** breaks stability—prefer `for_each` keys derived from AZ or
+  coupling - pass IDs explicitly.
+- **`count` with index-based naming** breaks stability - prefer `for_each` keys derived from AZ or
   subnet name.
-- **Over-broad `depends_on`**—use references instead.
+- **Over-broad `depends_on`** - use references instead.
 
 ## Example: examples/default
 
@@ -202,11 +202,11 @@ mirrors; if Enterprise registry lags public Git, automate promotion with signed 
 1. **Major version bump** (`v2.0.0`).
 2. **`moved` blocks** inside the module to preserve state addresses when possible.
 3. **CHANGELOG entry** with explicit upgrade commands (`terraform state mv` fallback).
-4. **Deprecation outputs**—temporary outputs warning consumers to rename inputs before removal.
+4. **Deprecation outputs** - temporary outputs warning consumers to rename inputs before removal.
 
 ## When not to use modules
 
-If you only wrap **one resource** without abstraction benefit, keep it inline—modules carry mental
+If you only wrap **one resource** without abstraction benefit, keep it inline - modules carry mental
 overhead. Likewise, don’t nest seven layers deep; flatten for readability.
 
 ## Contract with platform security
@@ -226,7 +226,7 @@ locals {
 ## Workspace/module confusion
 
 **Workspaces** split **state**; **modules** split **configuration**. Don't use workspaces where
-separate state files per business unit are safer—workspace mistakes can apply prod code to staging
+separate state files per business unit are safer - workspace mistakes can apply prod code to staging
 state if human discipline slips.
 
 ## Large-object handling
@@ -250,7 +250,7 @@ than reaching into sibling stacks unexpectedly.
 
 ## Interaction with OpenTofu registry
 
-If you standardize on **OpenTofu**, verify private registry tokens and download URLs—see
+If you standardize on **OpenTofu**, verify private registry tokens and download URLs - see
 `terraform-opentofu`. Module source strings remain similar; tooling around test may differ slightly.
 
 ## References across modules
@@ -261,7 +261,7 @@ for cross-stack values. Never rely on “just query tags” unless tags are guar
 ## Finishing thoughts
 
 Good modules behave like **libraries**: small surface, strong typing, explicit dependencies, docs,
-and tests. Poor modules behave like **black boxes** that surprise operators at 2 AM—avoid surprises.
+and tests. Poor modules behave like **black boxes** that surprise operators at 2 AM - avoid surprises.
 
 ## Meta-data with terraform.workspace (use carefully)
 
@@ -299,11 +299,11 @@ helpers to public API.
 ## Internal-only variables
 
 Prefix experimental inputs with `experimental_` or mark them `nullable` and **undocumented** until
-stable. Some teams reject any variable lacking README documentation in CI—automate that check.
+stable. Some teams reject any variable lacking README documentation in CI - automate that check.
 
 ## Cost estimation hooks
 
-Consider pairing modules with **Infracost** or cloud vendor calculators in PR comments—module
+Consider pairing modules with **Infracost** or cloud vendor calculators in PR comments - module
 authors should expose **instance sizes** and **replica counts** as variables to make cost models
 honest. This is not strictly Terraform language but significantly affects module design reviews.
 
@@ -332,11 +332,11 @@ Reviewers should search PR diffs for:
 
 Take a **monolithic root module** and extract **one bounded submodule** (`sns_topics`, `iam_roles`)
 end-to-end: write example, docs, upgrade guide for teammates. The exercise reveals which outputs were
-implicitly “known” only to the original author—make them explicit.
+implicitly “known” only to the original author - make them explicit.
 
 ## Version constraint duplication
 
-It is normal—and desirable—for **root modules** and **child modules** both to declare
+It is normal - and desirable - for **root modules** and **child modules** both to declare
 `required_providers`. The child declares minimum capabilities; the root may tighten or broaden
 depending on how it composes providers. Conflicts appear as `init` errors early; fix them in the
 child if the library should be more permissive.

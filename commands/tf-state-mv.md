@@ -7,7 +7,7 @@ description: Move resources in Terraform state to new addresses (rename / module
 
 ## Risk class
 
-**High** — can corrupt mapping between state and config if used carelessly. Prefer **`moved` blocks**
+**High**  -  can corrupt mapping between state and config if used carelessly. Prefer **`moved` blocks**
 when possible for reviewability.
 
 ## Pre-flight
@@ -20,7 +20,7 @@ when possible for reviewability.
 
 Ask human:
 
-1. “Confirm **FROM** and **TO** addresses verbatim—read aloud.”
+1. “Confirm **FROM** and **TO** addresses verbatim - read aloud.”
 2. “Why not use a **`moved` block** in this situation?”
 3. “Confirm **no concurrent applies** are running.”
 
@@ -33,7 +33,7 @@ terraform state mv 'aws_instance.i' 'module.compute.aws_instance.i'
 
 ## Safe patterns
 
-- Run **`terraform plan`** immediately after—expect no unexpected destroys for a pure rename.
+- Run **`terraform plan`** immediately after - expect no unexpected destroys for a pure rename.
 - Document CLI move in ticket when configuration cannot yet include `moved` blocks.
 
 ## Related

@@ -38,7 +38,7 @@ Rules of thumb:
 
 - Prefer **lower+upper** bounds (`>= 1.9, < 1.12`) over a single equality so patch releases flow.
 - Couple language features to versions: e.g. certain `ephemeral` resource behaviors need modern
-  Terraform; `check` blocks and `test` have minimum versions—consult release notes when adopting.
+  Terraform; `check` blocks and `test` have minimum versions - consult release notes when adopting.
 
 ## Types and variable constraints
 
@@ -98,7 +98,7 @@ common for building tag maps across modules.
 ## Sensitive values and outputs
 
 Mark variables and outputs **sensitive** to reduce accidental logging. This does **not** encrypt
-state—it only affects CLI redaction in human-oriented output.
+state - it only affects CLI redaction in human-oriented output.
 
 ```hcl
 variable "api_key" {
@@ -159,7 +159,7 @@ resource "aws_security_group" "app" {
 }
 ```
 
-Avoid `dynamic` when a resource already accepts a **list** attribute—prefer native list attributes
+Avoid `dynamic` when a resource already accepts a **list** attribute - prefer native list attributes
 when available for readability.
 
 ## Lifecycle meta-argument
@@ -180,7 +180,7 @@ resource "aws_db_instance" "app" {
 
 ### ignore_changes
 
-Stops drift reconciliation for listed attributes—use sparingly when an external system mutates
+Stops drift reconciliation for listed attributes - use sparingly when an external system mutates
 tags or auto-scaling shapes and you accept Terraform ignoring those diffs.
 
 ```hcl
@@ -194,7 +194,7 @@ resource "aws_instance" "bastion" {
 
 ### create_before_destroy
 
-Orders replacement so the new object is created first when the provider supports it—critical for
+Orders replacement so the new object is created first when the provider supports it - critical for
 zero-downtime when type-specific constraints allow.
 
 ```hcl
@@ -224,7 +224,7 @@ resource "aws_instance" "worker" {
 ## depends_on
 
 Terraform infers dependencies from references. Add **`depends_on`** only when you need an **ordering**
-constraint without referencing attributes—common with IAM attachments or eventual consistency edges.
+constraint without referencing attributes - common with IAM attachments or eventual consistency edges.
 
 ```hcl
 resource "aws_iam_role_policy_attachment" "lambda_basic" {
@@ -317,7 +317,7 @@ resource "aws_iam_role" "lambda" {
 
 Expose **small**, **typed** variable sets; return **outputs** that downstream stacks need (IDs, ARNs,
 DNS names). Keep provider configuration at the **root**; children receive `configuration_aliases`
-when multiple regions or accounts are required—see `terraform-providers` and `terraform-modules`.
+when multiple regions or accounts are required - see `terraform-providers` and `terraform-modules`.
 
 ## When not to use this skill
 
@@ -330,7 +330,7 @@ when multiple regions or accounts are required—see `terraform-providers` and `
 - **Type errors** on `for_each`: ensure the collection is a **map** or a **set of strings**, not a
   list of objects (wrap with `{ for x in var.items : x.name => x }`).
 - **Cycle errors**: break cycles with `-target` only as a last resort; usually reshape dependencies
-  or split stacks—see `terraform-troubleshooting`.
+  or split stacks - see `terraform-troubleshooting`.
 
 ## More expressions: try, can, and null handling
 
@@ -379,14 +379,14 @@ modules.
 ## Provider and resource identity recap
 
 Each **resource** has a type and a logical name: `aws_s3_bucket.audit_logs`. **Data sources** use
-`data.` prefix in references. **Provisioners** (`local-exec`, `remote-exec`) are a last resort—prefer
+`data.` prefix in references. **Provisioners** (`local-exec`, `remote-exec`) are a last resort - prefer
 native APIs, user-data, or pipeline jobs.
 
 ## Provider meta-arguments on resources
 
 Besides `for_each`, `count`, and `lifecycle`, resources can set **provider aliases** to target
 alternate configurations. Always pass provider mappings explicitly in modules that need multi-region
-or multi-account parallelism—see `terraform-providers` for `configuration_aliases`.
+or multi-account parallelism - see `terraform-providers` for `configuration_aliases`.
 
 Example pattern:
 
@@ -402,9 +402,9 @@ resource "aws_security_group" "peer" {
 
 Inside `module` blocks, `version = "..."` pins **Terraform Registry** modules. For local paths, omit
 version and use `source = "../modules/foo"`. Tag Git modules with **semver** and reference
-`ref` pins—details in `terraform-modules`.
+`ref` pins - details in `terraform-modules`.
 
 ## Formatting and readability
 
 Run `terraform fmt` on every change. For large `object` variables, align keys vertically in teams
-that adopt style guides—Terraform accepts either style, but consistency beats cleverness.
+that adopt style guides - Terraform accepts either style, but consistency beats cleverness.

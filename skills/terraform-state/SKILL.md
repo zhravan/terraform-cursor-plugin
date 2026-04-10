@@ -133,7 +133,7 @@ resource "aws_security_group_rule" "allow_from_vpc" {
 
 Hard anti-patterns:
 
-- Reading **remote state** to infer **private resource attributes** that are not outputs—export
+- Reading **remote state** to infer **private resource attributes** that are not outputs - export
   explicit outputs instead of reaching into foreign state blobs.
 
 ## State surgery CLI patterns
@@ -150,7 +150,7 @@ terraform state pull >"tfstate.backup.$(date +%s).json"
 terraform state mv 'aws_lambda_function.old' 'aws_lambda_function.new'
 ```
 
-Use `moved` blocks when you want the rename **documented in Git**—preferred for teams.
+Use `moved` blocks when you want the rename **documented in Git** - preferred for teams.
 
 ### rm (forget)
 
@@ -177,7 +177,7 @@ maintenance communications before using.
 
 Drift occurs when operators change resources outside Terraform. **`terraform plan -refresh-only`**
 (or modern `plan` subcommands, depending on version) focuses Terraform on reconciling state with
-reality without proposing attribute edits—useful to see drift before a normal plan.
+reality without proposing attribute edits - useful to see drift before a normal plan.
 
 ## State encryption
 
@@ -188,7 +188,7 @@ reality without proposing attribute edits—useful to see drift before a normal 
 - **Azure**: storage encryption + CMK.
 - **Terraform Cloud**: vendor-managed encryption; some tiers support customer-managed controls.
 
-**Encryption in Terraform 1.10+** introduced optional **state file encryption** features—consult
+**Encryption in Terraform 1.10+** introduced optional **state file encryption** features - consult
 current docs for enablement flags and key management; combine with backend-level KMS for defense in
 depth.
 
@@ -212,7 +212,7 @@ environment (`key = ".../prod"`) or fully separate workspaces/stacks when blast 
 
 ## Example: backend bootstrap (minimal IAM)
 
-Keep bootstrap stacks tiny and **manually protected**—they create the bucket and lock table for
+Keep bootstrap stacks tiny and **manually protected** - they create the bucket and lock table for
 everyone else.
 
 ```hcl
@@ -265,7 +265,7 @@ terraform init \
 
 When using Terraform Cloud with **remote execution**, runs occur on the vendor compute pool; local
 `state` subcommands still interact with the same remote record but may require authentication and
-organization permissions. Document who may run `state rm` in runbooks—treat it like database admin
+organization permissions. Document who may run `state rm` in runbooks - treat it like database admin
 access.
 
 ## Inspecting state safely
@@ -294,14 +294,14 @@ Avoid editing `terraform.tfstate` by hand unless you are following a documented 
 
 When the state bucket lives in a **logging/security account**, consumers assume a role in `init` via
 provider credentials or OIDC. Keep **KMS key policies** aligned so `s3:GetObject` decrypt works
-from CI roles in workload accounts. Document the **exact IAM** statements in your landing zone—see
+from CI roles in workload accounts. Document the **exact IAM** statements in your landing zone - see
 `terraform-multi-account`.
 
 ## Performance and blast radius
 
 Large states slow planning. Split stacks along **natural service boundaries** (network, data,
 compute) and connect via `terraform_remote_state` or data sources. Very large single stacks also
-complicate **`terraform state mv`** operations—migrate incrementally with `moved` blocks and small
+complicate **`terraform state mv`** operations - migrate incrementally with `moved` blocks and small
 PRs.
 
 ## Operational calendar for state buckets
@@ -328,7 +328,7 @@ terraform state pull | terraform show -json > /tmp/state.snapshot.json
 
 Store snapshots according to retention policy. Comparing **`terraform show -json`** outputs before
 and after a controversial `state rm` gives auditors a machine-readable trail. Always pair CLI
-operations with tickets that reference **addresses** acted upon—future you will thank present you.
+operations with tickets that reference **addresses** acted upon - future you will thank present you.
 
 When teaching new operators, have them practice **`state list`** and **`state show`** in a sandbox
 workspace before granting production `-backend` credentials. Muscle memory for addresses reduces
@@ -336,7 +336,7 @@ panic-induced typos during incidents.
 
 Document the **rollback** story for backend migrations: who approves, how long you retain the
 previous state key, and which monitors prove the new backend receives fresh writes after cutover.
-A rollback without a plan often reintroduces split-brain updates—worse than the original incident.
+A rollback without a plan often reintroduces split-brain updates - worse than the original incident.
 
-Label backup objects with **`terraform workspace` + git SHA** when possible—untagged `state.pull`
+Label backup objects with **`terraform workspace` + git SHA** when possible - untagged `state.pull`
 files become orphan puzzles months later during audits.

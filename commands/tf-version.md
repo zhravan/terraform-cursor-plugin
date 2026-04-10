@@ -7,7 +7,7 @@ description: Print Terraform CLI version metadata
 
 ## Risk class
 
-**None** — informational.
+**None**  -  informational.
 
 ## Pre-flight
 

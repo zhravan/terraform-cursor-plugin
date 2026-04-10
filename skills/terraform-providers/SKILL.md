@@ -116,7 +116,7 @@ module "logging" {
 }
 ```
 
-Mis-wiring `providers = { ... }` is a top cause of **resources landing in the wrong account**—always
+Mis-wiring `providers = { ... }` is a top cause of **resources landing in the wrong account** - always
 `terraform plan` with an **account identity data source** (`aws_caller_identity`, `azurerm_client_config`)
 when validating new maps.
 
@@ -125,8 +125,8 @@ when validating new maps.
 **`.terraform.lock.hcl`** stores cryptographic hashes for each provider **package** per **platform**
 triple. Benefits:
 
-- **Reproducible CI**—no surprise provider upgrades mid-pipeline.
-- **Air-gapped mirrors**—CI pulls exactly the bytes you hashed locally when populating a mirror.
+- **Reproducible CI** - no surprise provider upgrades mid-pipeline.
+- **Air-gapped mirrors** - CI pulls exactly the bytes you hashed locally when populating a mirror.
 
 Never **delete** the lock file casually; instead regenerate with `terraform providers lock` when you
 intentionally adopt a new provider version.
@@ -166,7 +166,7 @@ provider_installation {
 }
 ```
 
-Remember to **remove** overrides before shipping modules to colleagues—otherwise their machines
+Remember to **remove** overrides before shipping modules to colleagues - otherwise their machines
 cannot find your local path.
 
 ## Custom and forked providers
@@ -189,7 +189,7 @@ export TF_PLUGIN_CACHE_DIR="$PWD/.terraform-plugin-cache"
 terraform init -input=false
 ```
 
-Speed matters when you run dozens of workspaces—just ensure the cache directory is **trusted** and
+Speed matters when you run dozens of workspaces - just ensure the cache directory is **trusted** and
 occasionally purged if corruption is suspected.
 
 ## Security notes
@@ -258,7 +258,7 @@ on-call engineers should not guess which OIDC role feeds which alias during inci
 
 Schedule **quarterly** provider reviews: read changelogs for majors (`aws` v5 to v6), run speculative
 `plan` in staging with `-refresh-only` first, then full plans. Capture diffs attributable to
-**new defaults** (common on cloud providers) separately from intentional config edits—teams that skip
+**new defaults** (common on cloud providers) separately from intentional config edits - teams that skip
 this review get noisy plans that hide real drift.
 
 ## Habit: pair init with fmt and validate
@@ -269,7 +269,7 @@ terraform init -backend=false -input=false
 terraform validate
 ```
 
-Adding `-backend=false` lets you validate modules in isolation before credentials exist—useful for
+Adding `-backend=false` lets you validate modules in isolation before credentials exist - useful for
 **module CI** that only checks configuration grammar.
 
 ## Closing reminders
@@ -278,7 +278,7 @@ Adding `-backend=false` lets you validate modules in isolation before credential
 - **Commit** `.terraform.lock.hcl`.
 - **Alias** when you fan out regions/accounts; **wire** `configuration_aliases` deliberately.
 - **Mirror** or **cache** for speed and air gaps.
-- **Dev overrides** are personal—never leak them to shared roots.
+- **Dev overrides** are personal - never leak them to shared roots.
 
 ## Downgrade and hotfix policies
 
@@ -292,7 +292,7 @@ aws = {
 ```
 
 Document the ticket, expected timeline for removal of the exclusion, and who validates the next
-patch. Leaving `!=` pins forever creates archaeology problems—set calendar reminders.
+patch. Leaving `!=` pins forever creates archaeology problems - set calendar reminders.
 
 ## terraform providers schema (inspecting locally)
 
@@ -344,7 +344,7 @@ you must be explicit about landing zones.
 ## kubernetes provider: kubeconfig vs exec
 
 The Kubernetes provider can load **`kubeconfig`** paths or use **`exec`** plugins (EKS, GKE, AKS).
-For CI OIDC, **`exec`** is typical—ensure the pipeline task caches credentials minimally and rotates
+For CI OIDC, **`exec`** is typical - ensure the pipeline task caches credentials minimally and rotates
 tokens per job.
 
 ```hcl
@@ -367,14 +367,14 @@ provider "kubernetes" {
 ## Provider protocol upgrades (SDKv2 vs plugin/framework)
 
 When consuming internally developed providers, ask maintainers whether they are on **plugin
-framework** or legacy SDKv2—error messages and debugging steps differ. Framework providers often
+framework** or legacy SDKv2 - error messages and debugging steps differ. Framework providers often
 surface richer diagnostics; SDKv2 may still power popular community forks.
 
 ## Coordinating with Terragrunt
 
 Terragrunt can **generate** provider blocks per environment. Treat generated snippets as **build
 artifacts** in review (`terragrunt.hcl` stays canonical). Ensure `required_providers` versions still
-live in modules so `validate` works when Terragrunt is not involved—see `terraform-terragrunt`.
+live in modules so `validate` works when Terragrunt is not involved - see `terraform-terragrunt`.
 
 ## Supply chain attestation (advanced)
 
@@ -388,11 +388,11 @@ custody if a registry artifact ever changes unexpectedly.
 1. Read provider **upgrade guide** (AWS/Azure/GCP maintain detailed pages).
 2. Run `terraform plan` in **shadow** workspace with copied state (where legal) to preview churn.
 3. Split changes: first bump provider with **no config edits**, then follow with resource refactors.
-4. Watch for **removed attributes**—use `moved` blocks when resource types split.
+4. Watch for **removed attributes** - use `moved` blocks when resource types split.
 
 ## Mindshare for platform teams
 
 Publish a **short internal RFC template** for provider bumps: blast radius, rollback, tests run
 (`validate`, `plan`, integration), and on-call notification window. Provider changes are as risky as
-service deploys—give them the same ceremony.
+service deploys - give them the same ceremony.
 
